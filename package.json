@@ -1,16 +1,21 @@
 {
-  "name": "workflows",
-  "version": "0.0.1",
-  "description": "A project to showcase workflows",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/paulhuman/workflows.git"
-  },
-  "author": "Paul Human",
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-coffee": "^2.3.3",
-    "gulp-concat": "^2.6.1",
-    "gulp-util": "^3.0.8"
-  }
+    "name": "workflows",
+    "version": "0.0.1",
+    "description": "A project to showcase workflows",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/paulhuman/workflows.git"
+    },
+    "author": "Paul Human",
+    "dependencies": {
+        "jquery": "^3.1.1",
+        "mustache": "^2.3.0"
+    },
+    "devDependencies": {
+        "gulp": "^3.9.1",
+        "gulp-browserify": "^0.5.1",
+        "gulp-coffee": "^2.3.3",
+        "gulp-concat": "^2.6.1",
+        "gulp-util": "^3.0.8"
+    }
 }

@@ -1,9 +1,10 @@
 'use strict';
 
-var gulp   = require('gulp'),
-    util   = require('gulp-util'),
-    coffee = require('gulp-coffee'),
-    concat = require('gulp-concat');
+var gulp       = require('gulp'),
+    util       = require('gulp-util'),
+    coffee     = require('gulp-coffee'),
+    concat     = require('gulp-concat'),
+    browserify = require('gulp-browserify');
 
 var coffeeSources = ['components/coffee/tagline.coffee'];
 var jsSources = [
@@ -20,8 +21,9 @@ gulp.task('coffee', function () {
 
 });
 
-gulp.task('concat', function () {
+gulp.task('js', function () {
     gulp.src(jsSources)
         .pipe(concat('scripts.js'))
+        .pipe(browserify())
         .pipe(gulp.dest('builds/development/js'));
 });
