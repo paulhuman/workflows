@@ -10,6 +10,7 @@ var gulp       = require('gulp'),
     uglify     = require('gulp-uglify'),
     htmlmin    = require('gulp-htmlmin'),
     jsonminify = require('gulp-jsonminify'),
+    imagemin   = require('gulp-imagemin'),
     browserify = require('gulp-browserify');
 
 var env,
@@ -45,7 +46,12 @@ jsSources = [
 
 gulp.task('html', function () {
     gulp.src(htmlSources)
-        .pipe(gulpif(env === 'production', htmlmin({ collapseWhitespace: true })))
+        .pipe(gulpif(env === 'production', htmlmin({
+            collapseWhitespace: true,
+            removeScriptTypeAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            processScripts: ['text/template']
+        })))
         .pipe(gulpif(env === 'production', gulp.dest(outputDir)))
         .pipe(connect.reload());
 });
@@ -88,12 +94,22 @@ gulp.task('compass', function () {
         .pipe(connect.reload());
 });
 
+gulp.task('images', function () {
+    gulp.src('builds/development/images/**/*.*')
+        .pipe(gulpif(env === 'production', imagemin({
+            progressive: true,
+            svgoPlugins: [{ removeViewBox: false }]
+        })))
+        .pipe(gulpif(env === 'production', gulp.dest(outputDir + '/images')))
+});
+
 gulp.task('watch', function () {
     gulp.watch(htmlSources, ['html']);
     gulp.watch(jsonSources, ['json']);
     gulp.watch(coffeeSources, ['coffee']);
     gulp.watch(jsSources, ['js']);
     gulp.watch('components/sass/*.scss', ['compass']);
+    gulp.watch('builds/development/images/**/*.*', ['images']);
 });
 
 gulp.task('connect', function () {
@@ -107,4 +123,4 @@ gulp.task('connect', function () {
 // Task js зависит от coffee, но в данном случае исполняется параллельно,
 // а необходимо последовательно. В текущем варианте task js
 // исполнится дважды (сперва без созданного tagline.js)
-gulp.task('default', ['html', 'json', 'coffee', 'js', 'compass', 'connect', 'watch']);
+gulp.task('default', ['html', 'json', 'coffee', 'js', 'compass', 'images', 'connect', 'watch']);
