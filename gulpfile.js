@@ -9,6 +9,7 @@ var gulp       = require('gulp'),
     gulpif     = require('gulp-if'),
     uglify     = require('gulp-uglify'),
     htmlmin    = require('gulp-htmlmin'),
+    jsonminify = require('gulp-jsonminify'),
     browserify = require('gulp-browserify');
 
 var env,
@@ -31,9 +32,8 @@ if (env === 'development') {
     sassStyle = 'compressed';
 }
 
-
 htmlSources = ['builds/development/*.html'];
-jsonSources = [outputDir + '/js/*.json'];
+jsonSources = ['builds/development/js/*.json'];
 sassSources = ['components/sass/style.scss'];
 coffeeSources = ['components/coffee/tagline.coffee'];
 jsSources = [
@@ -52,6 +52,8 @@ gulp.task('html', function () {
 
 gulp.task('json', function () {
     gulp.src(jsonSources)
+        .pipe(gulpif(env === 'production', jsonminify()))
+        .pipe(gulpif(env === 'production', gulp.dest(outputDir + '/js')))
         .pipe(connect.reload());
 });
 
