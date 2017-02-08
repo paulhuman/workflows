@@ -8,6 +8,7 @@ var gulp       = require('gulp'),
     connect    = require('gulp-connect'),
     gulpif     = require('gulp-if'),
     uglify     = require('gulp-uglify'),
+    htmlmin    = require('gulp-htmlmin'),
     browserify = require('gulp-browserify');
 
 var env,
@@ -31,7 +32,7 @@ if (env === 'development') {
 }
 
 
-htmlSources = [outputDir + '/*.html'];
+htmlSources = ['builds/development/*.html'];
 jsonSources = [outputDir + '/js/*.json'];
 sassSources = ['components/sass/style.scss'];
 coffeeSources = ['components/coffee/tagline.coffee'];
@@ -44,6 +45,8 @@ jsSources = [
 
 gulp.task('html', function () {
     gulp.src(htmlSources)
+        .pipe(gulpif(env === 'production', htmlmin({ collapseWhitespace: true })))
+        .pipe(gulpif(env === 'production', gulp.dest(outputDir)))
         .pipe(connect.reload());
 });
 
